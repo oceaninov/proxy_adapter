@@ -4,10 +4,10 @@ Package config
 package config
 
 type ConfigObject struct {
-	AppHost     string `mapstructure:"APP_HOST"`
-	AppPort     string `mapstructure:"APP_PORT"`
-	AppName     string `mapstructure:"APP_NAME"`
-	AppLogLevel string `mapstructure:"APP_LOG_LEVEL"`
+	AppHost     string `mapstructure:"APP_HOST" envconfig:"APP_HOST"`
+	AppPort     string `mapstructure:"APP_PORT" envconfig:"APP_PORT"`
+	AppName     string `mapstructure:"APP_NAME" envconfig:"APP_NAME"`
+	AppLogLevel string `mapstructure:"APP_LOG_LEVEL" envconfig:"APP_LOG_LEVEL"`
 
 	AzureADHost         string `mapstructure:"AZURE_AD_HOST" envconfig:"AZURE_AD_HOST"`
 	AzureADTenantID     string `mapstructure:"AZURE_AD_TENANT_ID" envconfig:"AZURE_AD_TENANT_ID"`
