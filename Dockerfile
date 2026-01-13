@@ -1,6 +1,9 @@
 FROM golang:alpine AS builder
 
-ARG SSH_PRIVATE_KEY
+RUN mkdir -p ~/.ssh
+RUN --mount=type=secret,id=mysecret cat /run/secrets/mysecret > ~/.ssh/id_rsa
+RUN chmod 600 ~/.ssh/id_rsa
+
 RUN mkdir -p /go/src
 ADD . /go/src
 
@@ -9,13 +12,7 @@ WORKDIR /go/src
 
 RUN apk add --no-cache --update; \
     apk add git openssh; \
-    apk add tzdata; \
-    mkdir -p /root/.ssh; \
-    chmod 600 /root/.ssh; \
-    echo "${SSH_PRIVATE_KEY}" | tr ',' '\n' > /root/.ssh/id_rsa; \
-    chmod 600 /root/.ssh/id_rsa
-RUN cat /root/.ssh/id_rsa
-
+    apk add tzdata;
 
 RUN git config --global url."git@github.com:".insteadOf "https://github.com/"; \
     export GOPRIVATE=github.com/oceaninov; \
@@ -23,12 +20,15 @@ RUN git config --global url."git@github.com:".insteadOf "https://github.com/"; \
     export GONOSUMDB=github.com/oceaninov; \
     ssh-keyscan github.com >> /root/.ssh/known_hosts; \
     go mod tidy; \
-    ls /go; \
-    ls /usr/local/go; \
     CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o main-app main.go
 
 #Final Build Image
 FROM alpine:latest
+
+RUN apk update
+RUN apk add --no-cache iputils-ping
+RUN apk add busybox-extras
+
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 COPY --from=builder /go/src/main-app /app/main-app
 
