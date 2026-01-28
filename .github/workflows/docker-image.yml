@@ -1,0 +1,24 @@
+name: Docker Image CI - OceanInov Proxy Adapter
+on:
+  push:
+    branches: ["tsel-dev"]
+  pull_request:
+    branches: ["tsel-dev"]
+    types:
+      - closed
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+
+  build-tsel:
+    if: (github.repository_owner == 'oceaninov' && github.ref == 'refs/heads/tsel-dev')
+    runs-on: self-hosted
+
+    steps:
+    - name: code checkout
+      uses: actions/checkout@v4
+
+    - name: Build the Docker image TCash Merchant Location
+      run: ~/applications/deployment/bin/tcash/tcash-proxy-ad.sh

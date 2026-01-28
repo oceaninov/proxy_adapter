@@ -11,8 +11,7 @@ ADD . /go/src
 WORKDIR /go/src
 
 RUN apk add --no-cache --update; \
-    apk add git openssh; \
-    apk add tzdata;
+    apk add git openssh tzdata curl iputils-ping inetutils-telnet;
 
 RUN git config --global url."git@github.com:".insteadOf "https://github.com/"; \
     export GOPRIVATE=github.com/oceaninov; \
