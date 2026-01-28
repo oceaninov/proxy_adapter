@@ -4,7 +4,8 @@ import validation "github.com/go-ozzo/ozzo-validation/v4"
 
 type (
 	GetAccessTokenRequest struct {
-		Code string `json:"code"`
+		Code        string `json:"code"`
+		RedirectUri string `json:"redirect_uri"`
 	}
 	GetAccessTokenResponse struct {
 		AccessToken      string `json:"access_token"`
@@ -22,6 +23,8 @@ func (r GetAccessTokenRequest) Validate() error {
 	validation.ErrorTag = "tag"
 	return validation.ValidateStruct(&r,
 		validation.Field(&r.Code,
+			validation.Required),
+		validation.Field(&r.RedirectUri,
 			validation.Required),
 	)
 }

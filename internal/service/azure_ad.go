@@ -50,7 +50,7 @@ func (s *azureADService) GetAccessToken(ctx context.Context, req *dto.GetAccessT
 		"client_id":             s.opt.Config.AzureADClientID,
 		"scope":                 s.opt.Config.AzureADScope,
 		"code":                  req.Code,
-		"redirect_uri":          s.opt.Config.AzureADRedirectURI,
+		"redirect_uri":          req.RedirectUri,
 		"grant_type":            "authorization_code",
 		"client_secret":         s.opt.Config.AzureADClientSecret,
 		"response_type":         "code",
